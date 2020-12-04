@@ -36,12 +36,6 @@ class image_converter:
     gray_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
     cv_image3  = cv2.Canny(gray_image, 15.0, 30.0);
 
- # 円を描画                                                                               
-    color  = (0, 255, 0)
-    center = (100, 100)
-    radius = 20
-    cv2.circle(cv_image2, center, radius, color)
-
     # ウインドウのサイズを変更                                                               
     cv_half_image = cv2.resize(cv_image,   (0,0),fx=0.5, fy=0.5)
     cv_half_image2 = cv2.resize(cv_image2, (0,0),fx=0.5,fy=0.5);
