@@ -23,28 +23,39 @@ class image_converter:
     # RGB表色系からHSV表色系に変換                                                           
     hsv_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2HSV)
 
-    # しきい値の設定（ここでは赤を抽出）                                                     
-    color_min = np.array([0,64,0])
+    # しきい値の設定1（ここでは赤を抽出）                                                     
+    color_min = np.array([0,200,50])
     color_max = np.array([30,255,255])
 
-    # マスク画像を生成                                                                       
-    color_mask = cv2.inRange(hsv_image, color_min, color_max);
+    # マスク画像を生成1                                                                       
+    color_mask1 = cv2.inRange(hsv_image, color_min, color_max)
+    
+    # しきい値の設定2
+    color_min = np.array([150,200,50])
+    color_max = np.array([179,255,255])
+
+    # マスク画像を生成2                                                                      
+    color_mask2 = cv2.inRange(hsv_image, color_min, color_max)
+    
+    # 赤色のマスク
+    mask = color_mask1 + color_mask2
+
     # 画像配列のビット毎の倫理席。マスク画像だけが抽出される。                               
-    cv_image2  = cv2.bitwise_and(cv_image, cv_image, mask = color_mask)
+    cv_image2  = cv2.bitwise_and(cv_image, cv_image, mask = mask)
 
     # RGBからグレースケールへ変換                                                            
-    gray_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
-    cv_image3  = cv2.Canny(gray_image, 15.0, 30.0);
+    #gray_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
+    #cv_image3  = cv2.Canny(gray_image, 15.0, 30.0);
 
     # ウインドウのサイズを変更                                                               
     cv_half_image = cv2.resize(cv_image,   (0,0),fx=0.5, fy=0.5)
     cv_half_image2 = cv2.resize(cv_image2, (0,0),fx=0.5,fy=0.5);
-    cv_half_image3 = cv2.resize(cv_image3, (0,0),fx=0.5,fy=0.5);
+    #cv_half_image3 = cv2.resize(cv_image3, (0,0),fx=0.5,fy=0.5);
 
     # ウインドウ表示                                                                         
     cv2.imshow("Origin Image", cv_half_image)
     cv2.imshow("Result Image", cv_half_image2)
-    cv2.imshow("Edge Image",   cv_half_image3)
+    #cv2.imshow("Edge Image",   cv_half_image3)
     cv2.waitKey(3)
    
     try:
