@@ -43,21 +43,26 @@ class image_converter:
     # 画像配列のビット毎の倫理席。マスク画像だけが抽出される。                               
     cv_image2  = cv2.bitwise_and(cv_image, cv_image, mask = mask)
 
-    # RGBからグレースケールへ変換                                                            
-    #gray_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2GRAY)
-    #cv_image3  = cv2.Canny(gray_image, 15.0, 30.0);
+    # マスクした画像からグレースケールへ変換
+    gray_image = cv2.cvtColor(cv_image2, cv2.COLOR_BGR2GRAY)
 
-    # ウインドウのサイズを変更                                                               
+    # グレースケールから白黒に変換
+    ret,thresh = cv2.threshold(gray_image, 0, 255, cv2.THRESH_OTSU)
+    
+    
+    #ウインドウのサイズを変更                                                               
     cv_half_image = cv2.resize(cv_image,   (0,0),fx=0.5, fy=0.5)
     cv_half_image2 = cv2.resize(cv_image2, (0,0),fx=0.5,fy=0.5);
-    #cv_half_image3 = cv2.resize(cv_image3, (0,0),fx=0.5,fy=0.5);
+    cv_half_image3 = cv2.resize(gray_image, (0,0),fx=0.5,fy=0.5);
+    cv_half_image4 = cv2.resize(thresh, (0,0),fx=0.5,fy=0.5);
 
     # ウインドウ表示                                                                         
     cv2.imshow("Origin Image", cv_half_image)
     cv2.imshow("Result Image", cv_half_image2)
-    #cv2.imshow("Edge Image",   cv_half_image3)
+    cv2.imshow("gray Image",   cv_half_image3)
+    cv2.imshow("Image",   cv_half_image4)
     cv2.waitKey(3)
-   
+
     try:
       self.image_pub.publish(self.bridge.cv2_to_imgmsg(cv_image2, "bgr8"))
     except CvBridgeError as e:
