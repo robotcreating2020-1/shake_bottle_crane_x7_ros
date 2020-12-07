@@ -8,9 +8,12 @@ import moveit_commander
 import geometry_msgs.msg
 import rosnode
 from tf.transformations import quaternion_from_euler
+from std_msgs.msg import Int32
 
 def main():
-    rospy.init_node("crane_x7_pick_and_place_controller")
+    rospy.init_node("crane_x7_show_bottle")
+    pub = rospy.Publisher('bottle_color', Int32, queue_size=1)
+    n = 0
     robot = moveit_commander.RobotCommander()
     arm = moveit_commander.MoveGroupCommander("arm")
     def move_max_velocity(value = 0.5):
@@ -39,6 +42,19 @@ def main():
         gripper.set_joint_value_target([pou, pou])
         gripper.go()
 
+    def show_bottle(pos_y):
+        #見せに行く準備
+        move_arm(0.15, pos_y, 0.3)
+        move_arm(0.17, pos_y, 0.25)
+
+        #ボトルを見に行く
+        move_max_velocity()
+        move_arm(0.30, pos_y, 0.1)
+        n = 1
+        pub.publish(n)
+        n = 0
+        rospy.sleep(5)
+
 
     # アームを移動する
     def move_arm(pos_x, pos_y, pos_z):
@@ -62,35 +78,14 @@ def main():
     #ハンドを開く
     #move_gripper(1.3)
 
-    
-    #見せに行く準備1
-    move_arm(0.15, 0.15, 0.3)
-    move_arm(0.17, 0.20, 0.25)
+    #1つめ
+    show_bottle(0.20)
 
-    #1つめを見に行く
-    move_max_velocity()
-    move_arm(0.30, 0.20, 0.1)
-    rospy.sleep(5)
+    #2つめ
+    show_bottle(0.0)
 
-
-    #2つめに見せる準備
-    move_arm(0.15, 0, 0.3)
-    move_arm(0.17, 0, 0.25)
-
-
-    #2つめを見に行く
-    move_max_velocity()
-    move_arm(0.30, 0.0, 0.1)
-    rospy.sleep(5)
-
-    #3つめを見せる準備
-    move_arm(0.15, -0.15, 0.3)
-    move_arm(0.17, -0.20, 0.25)
-
-    #3つめを見に行く
-    move_max_velocity()
-    move_arm(0.30, -0.20, 0.1)
-    rospy.sleep(5)
+    #3つめ
+    show_bottle(-0.20)
 
     #homeに戻る
     arm.set_named_target("home")
