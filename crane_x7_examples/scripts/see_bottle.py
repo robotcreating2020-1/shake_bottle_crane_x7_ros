@@ -89,17 +89,24 @@ def main():
     #move_gripper(1.3)
 
     #1つめ
+    move_arm(0.15, 0.10, 0.3)
     pre_show_bottle(0.20)
     flag = 1
     show_bottle(0.20)
+
+    arm.set_named_target("home")
+    arm.go()
 
     #2つめ
     pre_show_bottle(0.0)
     flag = 2
     show_bottle(0.0)
 
+    arm.set_named_target("home")
+    arm.go()
 
     #3つめ
+    move_arm(0.15, -0.10, 0.3)
     pre_show_bottle(-0.20)
     flag = 3
     show_bottle(-0.20)
