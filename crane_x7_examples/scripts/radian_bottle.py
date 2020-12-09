@@ -46,7 +46,7 @@ def main():
         target_pose.position.x = pos_x
         target_pose.position.y = pos_y
         target_pose.position.z = pos_z
-        q = quaternion_from_euler(-3.14/2.0, 0.0, -3.14/2.0)  # 上方から掴みに行く場合
+        q = quaternion_from_euler(0.0, 3.14, 0.0)  # 上方から掴みに行く場合は xを-3.14にする
         target_pose.orientation.x = q[0]
         target_pose.orientation.y = q[1]
         target_pose.orientation.z = q[2]
@@ -93,7 +93,7 @@ def main():
     #ボトルを掴んで落とす
     for i in range(5):
       Drop_bottle(0.24, 0.20, 0.10, 0.20)
-      radian_arm(0.24, 0.20, 0.30)
+      radian_arm(0.24, 0.30, 0.30)
       move_gripper(1.57)
       i += 1
 
