@@ -70,13 +70,13 @@ def main():
 
     def pre_show_bottle(pos_y):
         #見せに行く準備
-        move_arm(0.15, pos_y, 0.3)
-        move_arm(0.17, pos_y, 0.25)
+        move_arm(0.13, pos_y, 0.3)
+        move_arm(0.15, pos_y, 0.25)
 
     def show_bottle(pos_y):
         #ボトルを見に行く
         move_max_velocity()
-        move_arm(0.30, pos_y, 0.1)
+        move_arm(0.15, pos_y, 0.1)
         sub = rospy.Subscriber('bottle_size', Int32, callback)
         #pub.publish(n)
         rospy.sleep(5)
@@ -144,15 +144,23 @@ def main():
 
     #yに格納できてるかの確認用
     print('{0}にボトルがあるね！'.format(y))
+    rospy.sleep(2)
 
     arm.set_named_target("home")
     arm.go()
 
+    move_gripper(1.57)
+
     #ボトルを掴んで落とすのはここから
-    Drop_bottle(0.15,y,0.1,0.2)
+    move_arm(0.25, 0.1, 0.3)
+    y2 = y - 0.05
+    move_arm(0.25, y2, 0.3)
+    move_arm(0.23, y, 0.25)
+
+    Drop_bottle(0.23,y,0.1,0.2)
 
     arm.set_named_target("vertical")
-
+    arm.go()
 
 
 if __name__ == '__main__':
