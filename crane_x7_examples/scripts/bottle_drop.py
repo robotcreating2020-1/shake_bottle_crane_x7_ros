@@ -116,7 +116,7 @@ def main():
 
     #ボトルを掴んで落とす
       Drop_bottle1(0.24, 0.20, 0.10, 0.20)
-      radian_arm(0,24, 0.25, 0.30)
+      radian_arm(0.24, 0.25, 0.30)
       move_gripper(1.57)
     for i in range(4):
       Drop_bottle2(0.24, 0.20, 0.10, 0.20)
