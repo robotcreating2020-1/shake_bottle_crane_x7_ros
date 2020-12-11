@@ -23,11 +23,11 @@ def callback(data):
       pub = rospy.Publisher("find_red", Int32, queue_size=1)
       pub.publish(flag) 
       if flag == 1: #yにぼとるのy座標を格納
-        y = 0.20
-      elif flag == 2:
+        y = 0.30
+      if flag == 2:
         y = 0.0
-      elif flag == 3:
-        y = -0.20
+      if flag == 3:
+        y = -0.30
 
     finish = False
 
@@ -127,6 +127,7 @@ def main():
         move_arm(x, y, z1)
         move_gripper(0.25)
         move_arm(x, y, z2)
+        move_arm(0.2, 0, z2)
         target_joint_values = arm.get_current_joint_values()
         arm.set_joint_value_target(target_joint_values)
         arm.go()
@@ -146,10 +147,13 @@ def main():
     arm.go()
  
     #ハンドを開く
-    #move_gripper(1.3)
+    move_gripper(1.3)
+
+    move_gripper(0.15)
+
 
     #1つめのボトルを見る
-    move_arm(0.15, 0.10, 0.3)
+    move_arm(0.15, 0.20, 0.3)
     pre_show_bottle(0.30)
     flag = 1
     show_bottle(0.30)
@@ -166,7 +170,7 @@ def main():
     arm.go()
 
     #3つめのボトルを見る
-    move_arm(0.15, -0.10, 0.3)
+    move_arm(0.15, -0.20, 0.3)
     pre_show_bottle(-0.30)
     flag = 3
     show_bottle(-0.30)
@@ -192,19 +196,27 @@ def main():
     #move_arm(0.1, y, 0.3)
     #move_arm(0.2, y, 0.25)
 
-    move_arm(0.3, 0.15, 0.3)
-    move_arm(0.27, 0.20, 0.25)
+    move_arm(0.3, y, 0.3)
+    move_arm(0.33, y, 0.25)
 
 
     #ボトルを掴んで落とす
-    Drop_bottle1(0.29, y, 0.10, 0.20)
-    radian_arm(0.29, y+0.05, 0.20)
+    #Drop_bottle1(0.3, 0, 0.10, 0.20)
+    move_arm(0.33, y, 0.1)
+    move_gripper(0.25)
+
+    arm.set_named_target("home")
+    arm.go()
+    
+    radian_arm(0.2, 0, 0.20)
+
     move_gripper(1.57)
     for i in range(4):
-      Drop_bottle2(0.29, y, 0.10, 0.20)
-      radian_arm(0.29, y+0.05, 0.20)
+      Drop_bottle2(0.2, 0, 0.10, 0.20)
+      radian_arm(0.2, 0, 0.20)
       move_gripper(1.57)
       i += 1
+    
 
     arm.set_named_target("home")
     arm.go()
