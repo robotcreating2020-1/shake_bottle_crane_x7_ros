@@ -23,11 +23,11 @@ def callback(data):
       pub = rospy.Publisher("find_red", Int32, queue_size=1)
       pub.publish(flag) 
       if flag == 1: #yにぼとるのy座標を格納
-        y = 0.30
+        y = 0.20
       elif flag == 2:
         y = 0.0
       elif flag == 3:
-        y = -0.30
+        y = -0.20
 
     finish = False
 
@@ -95,13 +95,50 @@ def main():
         target_pose.orientation.w = q[3]
         arm.set_pose_target(target_pose)  # 目標ポーズ設定
         arm.go()  # 実行
+
+    def move_arm2(pos_x,pos_y,pos_z):
+        target_pose = geometry_msgs.msg.Pose()
+        target_pose.position.x = pos_x
+        target_pose.position.y = pos_y
+        target_pose.position.z = pos_z
+        q = quaternion_from_euler(-3.14, 0.0, -3.14/2.0) #(x軸、y軸、z軸)にそれぞれ回転する
+        target_pose.orientation.x = q[0]
+        target_pose.orientation.y = q[1]
+        target_pose.orientation.z = q[2]
+        target_pose.orientation.w = q[3]
+        arm.set_pose_target(target_pose) #目標ポーズの設定
+        arm.go() #実行
     
-    def Drop_bottle(pos_x, pos_y, pos_z1, pos_z2):
-        move_arm(pos_x, pos_y, pos_z1)
+    #gripperの角度をつける関数(ボトルに角度をつける部分)
+    def radian_arm(pos_x,pos_y,pos_z):
+        target_pose = geometry_msgs.msg.Pose()
+        target_pose.position.x = pos_x
+        target_pose.position.y = pos_y
+        target_pose.position.z = pos_z
+        q = quaternion_from_euler(-3.14, 0.0, -3.14/2.0) #(x軸、y軸、z軸)にそれぞれ回転する
+        target_pose.orientation.x = q[0]
+        target_pose.orientation.y = q[1]
+        target_pose.orientation.z = q[2]
+        target_pose.orientation.w = q[3]
+        arm.set_pose_target(target_pose) #目標ポーズの設定
+        arm.go() #実行
+
+    def Drop_bottle1(x, y, z1, z2):
+        move_arm(x, y, z1)
         move_gripper(0.25)
-        move_arm(pos_x, pos_y, pos_z2)
+        move_arm(x, y, z2)
+        target_joint_values = arm.get_current_joint_values()
+        arm.set_joint_value_target(target_joint_values)
         arm.go()
-        move_gripper(1.57)
+
+    #ボトル(2回目以降)を落とす関数を定義
+    def Drop_bottle2(x, y, z1, z2):
+        move_arm2(x, y, z1)
+        move_gripper(0.25)
+        move_arm2(x, y, z2)
+        target_joint_values = arm.get_current_joint_values()
+        arm.set_joint_value_target(target_joint_values)
+        arm.go()
     
 
     # SRDFに定義されている"home"の姿勢にする
@@ -152,10 +189,26 @@ def main():
     move_gripper(1.3)
 
     #ボトルを掴んで落とすのはここから
-    move_arm(0.1, y, 0.3)
-    move_arm(0.2, y, 0.25)
+    #move_arm(0.1, y, 0.3)
+    #move_arm(0.2, y, 0.25)
 
-    Drop_bottle(0.35,y,0.1,0.2)
+    move_arm(0.3, 0.15, 0.3)
+    move_arm(0.27, 0.20, 0.25)
+
+
+    #ボトルを掴んで落とす
+    Drop_bottle1(0.29, y, 0.10, 0.20)
+    radian_arm(0.29, y+0.05, 0.20)
+    move_gripper(1.57)
+    for i in range(4):
+      Drop_bottle2(0.29, y, 0.10, 0.20)
+      radian_arm(0.29, y+0.05, 0.20)
+      move_gripper(1.57)
+      i += 1
+
+    arm.set_named_target("home")
+    arm.go()
+    
 
     arm.set_named_target("vertical")
     arm.go()
