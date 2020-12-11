@@ -46,20 +46,21 @@ def main():
         target_pose.position.x = pos_x
         target_pose.position.y = pos_y
         target_pose.position.z = pos_z
-        q = quaternion_from_euler(0.0, 3.14, 0.0)  # 上方から掴みに行く場合は xを-3.14にする
+        q = quaternion_from_euler(-3.14/2.0, 0.0, -3.14/2.0)  # 上方から掴みに行く場合は xを-3.14にする
         target_pose.orientation.x = q[0]
         target_pose.orientation.y = q[1]
         target_pose.orientation.z = q[2]
         target_pose.orientation.w = q[3]
         arm.set_pose_target(target_pose)  # 目標ポーズ設定
         arm.go()  # 実行
+
     #gripperの角度をつける関数(ボトルに角度をつける部分)
     def radian_arm(pos_x,pos_y,pos_z):
         target_pose = geometry_msgs.msg.Pose()
         target_pose.position.x = pos_x
         target_pose.position.y = pos_y
         target_pose.position.z = pos_z
-        q = quaternion_from_euler(0.0, 3.14/1.5, 0.0) #(x軸、y軸、z軸)にそれぞれ回転する
+        q = quaternion_from_euler(-3.14, 0.0, -3.14/2.0) #(x軸、y軸、z軸)にそれぞれ回転する
         target_pose.orientation.x = q[0]
         target_pose.orientation.y = q[1]
         target_pose.orientation.z = q[2]
@@ -93,7 +94,7 @@ def main():
     #ボトルを掴んで落とす
     for i in range(5):
       Drop_bottle(0.24, 0.20, 0.10, 0.20)
-      radian_arm(0.24, 0.30, 0.30)
+      radian_arm(0.24, 0.20, 0.30)
       move_gripper(1.57)
       i += 1
 
