@@ -23,11 +23,11 @@ def callback(data):
       pub = rospy.Publisher("find_red", Int32, queue_size=1)
       pub.publish(flag) 
       if flag == 1: #yにぼとるのy座標を格納
-        y = 0.20
+        y = 0.30
       elif flag == 2:
         y = 0.0
       elif flag == 3:
-        y = -0.20
+        y = -0.30
 
     finish = False
 
@@ -113,9 +113,9 @@ def main():
 
     #1つめのボトルを見る
     move_arm(0.15, 0.10, 0.3)
-    pre_show_bottle(0.20)
+    pre_show_bottle(0.30)
     flag = 1
-    show_bottle(0.20)
+    show_bottle(0.30)
 
     arm.set_named_target("home")
     arm.go()
@@ -130,9 +130,9 @@ def main():
 
     #3つめのボトルを見る
     move_arm(0.15, -0.10, 0.3)
-    pre_show_bottle(-0.20)
+    pre_show_bottle(-0.30)
     flag = 3
-    show_bottle(-0.20)
+    show_bottle(-0.30)
 
     #homeに戻る
     arm.set_named_target("home")
@@ -149,15 +149,13 @@ def main():
     arm.set_named_target("home")
     arm.go()
 
-    move_gripper(1.57)
+    move_gripper(1.3)
 
     #ボトルを掴んで落とすのはここから
-    move_arm(0.25, 0.1, 0.3)
-    y2 = y - 0.05
-    move_arm(0.25, y2, 0.3)
-    move_arm(0.23, y, 0.25)
+    move_arm(0.1, y, 0.3)
+    move_arm(0.2, y, 0.25)
 
-    Drop_bottle(0.23,y,0.1,0.2)
+    Drop_bottle(0.35,y,0.1,0.2)
 
     arm.set_named_target("vertical")
     arm.go()
