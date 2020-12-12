@@ -196,8 +196,10 @@ def main():
     #move_arm(0.1, y, 0.3)
     #move_arm(0.2, y, 0.25)
 
-    move_arm(0.34, y-0.1, 0.3)
-    move_arm(0.25, y, 0.25)
+    move_arm(0.34, y-0.1, 0.2)
+    move_arm(0.25, y, 0.15)
+    move_arm(0.25, y, 0.13)
+
 
 
     #ボトルを掴んで落とす
