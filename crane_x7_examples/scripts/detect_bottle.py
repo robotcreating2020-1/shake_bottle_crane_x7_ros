@@ -154,16 +154,16 @@ def main():
 
     #1つめのボトルを見る
     move_arm(0.15, 0.20, 0.3)
-    pre_show_bottle(0.30)
     flag = 1
+    pre_show_bottle(0.30)
     show_bottle(0.30)
 
     arm.set_named_target("home")
     arm.go()
 
     #2つめのボトルを見る
-    pre_show_bottle(0.0)
     flag = 2
+    pre_show_bottle(0.0)
     show_bottle(0.0)
 
     arm.set_named_target("home")
@@ -171,8 +171,8 @@ def main():
 
     #3つめのボトルを見る
     move_arm(0.15, -0.20, 0.3)
-    pre_show_bottle(-0.30)
     flag = 3
+    pre_show_bottle(-0.30)
     show_bottle(-0.30)
 
     #homeに戻る
@@ -196,13 +196,13 @@ def main():
     #move_arm(0.1, y, 0.3)
     #move_arm(0.2, y, 0.25)
 
-    move_arm(0.3, y, 0.3)
-    move_arm(0.33, y, 0.25)
+    move_arm(0.34, y-0.1, 0.3)
+    move_arm(0.25, y, 0.25)
 
 
     #ボトルを掴んで落とす
     #Drop_bottle1(0.3, 0, 0.10, 0.20)
-    move_arm(0.33, y, 0.1)
+    move_arm(0.34, y, 0.1)
     move_gripper(0.25)
 
     arm.set_named_target("home")
