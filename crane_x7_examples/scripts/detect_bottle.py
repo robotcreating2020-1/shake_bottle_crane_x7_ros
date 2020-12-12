@@ -10,17 +10,19 @@ import rosnode
 from tf.transformations import quaternion_from_euler
 from std_msgs.msg import Int32
 
+#グローバル変数を初期化
 finish = True
 flag = 0
 y = 0
 
+#callback関数
 def callback(data):
     global finish
     if finish == True:
       global y
       pub = rospy.Publisher("find_red", Int32, queue_size=1)
       pub.publish(flag) 
-      if flag == 1:
+      if flag == 1: #yにぼとるのy座標を格納
         y = 0.20
       elif flag == 2:
         y = 0.0
@@ -68,13 +70,13 @@ def main():
 
     def pre_show_bottle(pos_y):
         #見せに行く準備
-        move_arm(0.15, pos_y, 0.3)
-        move_arm(0.17, pos_y, 0.25)
+        move_arm(0.13, pos_y, 0.3)
+        move_arm(0.15, pos_y, 0.25)
 
     def show_bottle(pos_y):
         #ボトルを見に行く
         move_max_velocity()
-        move_arm(0.30, pos_y, 0.1)
+        move_arm(0.15, pos_y, 0.1)
         sub = rospy.Subscriber('bottle_size', Int32, callback)
         #pub.publish(n)
         rospy.sleep(5)
@@ -109,7 +111,7 @@ def main():
     #ハンドを開く
     #move_gripper(1.3)
 
-    #1つめ
+    #1つめのボトルを見る
     move_arm(0.15, 0.10, 0.3)
     pre_show_bottle(0.20)
     flag = 1
@@ -118,7 +120,7 @@ def main():
     arm.set_named_target("home")
     arm.go()
 
-    #2つめ
+    #2つめのボトルを見る
     pre_show_bottle(0.0)
     flag = 2
     show_bottle(0.0)
@@ -126,7 +128,7 @@ def main():
     arm.set_named_target("home")
     arm.go()
 
-    #3つめ
+    #3つめのボトルを見る
     move_arm(0.15, -0.10, 0.3)
     pre_show_bottle(-0.20)
     flag = 3
@@ -140,16 +142,25 @@ def main():
     arm.set_named_target("vertical")
     arm.go()
 
+    #yに格納できてるかの確認用
     print('{0}にボトルがあるね！'.format(y))
+    rospy.sleep(2)
 
     arm.set_named_target("home")
     arm.go()
 
-    
-    Drop_bottle(0.15,y,0.1,0.2)
+    move_gripper(1.57)
+
+    #ボトルを掴んで落とすのはここから
+    move_arm(0.25, 0.1, 0.3)
+    y2 = y - 0.05
+    move_arm(0.25, y2, 0.3)
+    move_arm(0.23, y, 0.25)
+
+    Drop_bottle(0.23,y,0.1,0.2)
 
     arm.set_named_target("vertical")
-
+    arm.go()
 
 
 if __name__ == '__main__':
