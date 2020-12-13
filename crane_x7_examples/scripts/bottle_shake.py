@@ -11,7 +11,7 @@ import rosnode
 from tf.transformations import quaternion_from_euler
 
 def main():
-    rospy.init_node("swing_object")
+    rospy.init_node("bottle_shake")
     robot = moveit_commander.RobotCommander()
     arm = moveit_commander.MoveGroupCommander("arm")
     arm.set_max_velocity_scaling_factor(0.3)

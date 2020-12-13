@@ -48,16 +48,8 @@ def main():
 	arm.set_pose_target(target_pose)
 	arm.go()
 
-    def bottle_splash(pos_y):
-        move_gripper(1.57)
-	move_arm(0.17,pos_y,0.3)
-	move_arm(0.20,pos_y,0.15)
-	move_arm(0.23,pos_y,0.13)
-	move_arm(0.25,pos_y,0.13)
-	move_gripper(0.25)
-	arm.set_named_target("vertical")
-	arm.go()
-	data = [[["s",3,-60,0.4],["s",5,-40,0.4]],[["s",3,1,1],["s",5,40,1]],[["s",3,-60,0.4],["s",5,-40,0.4]],[["s",3,1,1],["s",5,40,1]],[["s",3,1,1],["s",5,40,1]],[["s",3,-60,0.4],["s",5,-40,0.4]],[["s",3,1,1],["s",5,40,1]]]
+    def bottle_splash():
+        data = [[["s",3,-60,0.4],["s",5,-40,0.4]],[["s",3,1,1],["s",5,40,1]],[["s",3,-60,0.4],["s",5,-40,0.4]],[["s",3,1,1],["s",5,40,1]],[["s",3,1,1],["s",5,40,1]],[["s",3,-60,0.4],["s",5,-40,0.4]],[["s",3,1,1],["s",5,40,1]]]
 	arm_joint_values = arm.get_current_joint_values()
 	for flame in range(len(data)):
 	    for joint_data in range(len(data[flame])):
@@ -72,14 +64,25 @@ def main():
 	    arm.set_joint_value_target(arm_joint_values)
 	    arm.set_max_velocity_scaling_factor(speed)
 	    arm.go()
-	arm.set_named_target("vertical")
-	arm.go()
+	print("done")
 
     arm.set_named_target("home")
     arm.go()
-    y = 0.20
-    bottle_splash(y)
-    print("done")
+
+    move_gripper(1.57)
+    y = -0.20
+    move_arm(0.17,y,0.3)
+    move_arm(0.20,y,0.17)
+    move_arm(0.23,y,0.15)
+    move_arm(0.25,y,0.15)
+    move_gripper(0.25)
+    arm.set_named_target("vertical")
+    arm.go()
+
+    bottle_splash()
+
+    arm.set_named_target("vertical")
+    arm.go()
 
 if __name__ == '__main__':
     
