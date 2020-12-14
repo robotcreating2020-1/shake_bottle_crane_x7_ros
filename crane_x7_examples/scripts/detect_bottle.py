@@ -70,8 +70,8 @@ def main():
 
     def pre_show_bottle(pos_y):
         #見せに行く準備
-        move_arm(0.13, pos_y, 0.3)
-        move_arm(0.15, pos_y, 0.25)
+        move_arm(0.13, pos_y, 0.2)
+        move_arm(0.15, pos_y, 0.15)
 
     def show_bottle(pos_y):
         #ボトルを見に行く
@@ -170,7 +170,6 @@ def main():
         arm.go()
 
     # SRDFに定義されている"home"の姿勢にする
-    arm.set_named_target("home")
     arm.go()
  
     #ハンドを開く
