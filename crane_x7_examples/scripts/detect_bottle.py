@@ -140,7 +140,34 @@ def main():
         target_joint_values = arm.get_current_joint_values()
         arm.set_joint_value_target(target_joint_values)
         arm.go()
-    
+
+    #ボトルを振る動作
+    def bottle_splash(pos_y):
+        #move_gripper(1.57)
+        #move_arm(0.17,pos_y,0.3)
+        #move_arm(0.20,pos_y,0.15)
+        #move_arm(0.23,pos_y,0.13)
+        #move_arm(0.25,pos_y,0.13)
+        #move_gripper(0.25)
+        arm.set_named_target("vertical")
+        arm.go()
+        data = [[["s",3,-60,0.4],["s",5,-40,0.4]],[["s",3,1,1],["s",5,40,1]],[["s",3,-60,0.4],["s",5,-40,0.4]],[["s",3,1,1],["s",5,40,1]],[["s",3,1,1],["s",5,40,1]],[["s",3,-60,0.4],["s",5,-40,0.4]],[["s",3,1,1],["s",5,40,1]]]
+        arm_joint_values = arm.get_current_joint_values()
+        for flame in range(len(data)):
+            for joint_data in range(len(data[flame])):
+              part = data[flame][joint_data][0]
+              joint = int(data[flame][joint_data][1])
+              angle = float(data[flame][joint_data][2])/180.0*math.pi
+              speed = float(data[flame][joint_data][3])
+              print(joint, angle, speed)
+              arm_joint_values[joint] = angle
+            print("flame")
+            print(arm_joint_values)
+            arm.set_joint_value_target(arm_joint_values)
+            arm.set_max_velocity_scaling_factor(speed)
+            arm.go()
+        arm.set_named_target("vertical")
+        arm.go()
 
     # SRDFに定義されている"home"の姿勢にする
     arm.set_named_target("home")
@@ -202,14 +229,19 @@ def main():
 
 
 
-    #ボトルを掴んで落とす
-    #Drop_bottle1(0.3, 0, 0.10, 0.20)
+    #ボトルを掴む
     move_arm(0.34, y, 0.1)
     move_gripper(0.25)
 
     arm.set_named_target("home")
     arm.go()
+    #佐藤担当　ここまで
+
+    #實川担当　ボトルを振る
+    bottle_splash(y)
+    #實川担当 ここまで  
     
+    #金子担当 ボトルを落とす
     radian_arm(0.2, 0, 0.20)
 
     move_gripper(1.57)
