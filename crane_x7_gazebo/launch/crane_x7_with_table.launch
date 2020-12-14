@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <launch>
 
-<!-- このファイルはオリジナルのROSパッケージに対し、変更を加えています --> 
-
   <!-- MoveIt configurations-->
   <arg name="use_gui" default="false" />
   <!-- By default, we do not start a database (it can be large) -->

@@ -13,7 +13,7 @@ from std_msgs.msg import Int32
 #グローバル変数を初期化
 finish = True
 flag = 0
-y = 0
+y = 0.20
 
 #callback関数
 def callback(data):

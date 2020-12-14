@@ -19,11 +19,19 @@
       <include>
         <uri>model://wood_cube_5cm</uri>
       </include>
+<<<<<<< HEAD
+=======
+
+>>>>>>> hikaru
       <pose>0.20 0 1.0 0 0 0</pose>
     </model>
 -->
     <model name="bottle">
+<<<<<<< HEAD
   <pose>0.4 0.3 1.5 0 0 0</pose>
+=======
+  <pose>0.3 0.2 1.5 0 0 0</pose>
+>>>>>>> hikaru
     <link name="link">
       <inertial>
         <mass>0.001</mass>
@@ -56,7 +64,11 @@
   </model>
 
     <model name="bottle">
+<<<<<<< HEAD
   <pose>0.4 0.0 1.5 0 0 0</pose>
+=======
+  <pose>0.3 0.0 1.5 0 0 0</pose>
+>>>>>>> hikaru
     <link name="link">
       <inertial>
         <mass>0.001</mass>
@@ -89,7 +101,11 @@
   </model>
 
     <model name="bottle">
+<<<<<<< HEAD
   <pose>0.4 -0.3 1.5 0 0 0</pose>
+=======
+  <pose>0.3 -0.2 1.5 0 0 0</pose>
+>>>>>>> hikaru
     <link name="link">
       <inertial>
         <mass>0.001</mass>
