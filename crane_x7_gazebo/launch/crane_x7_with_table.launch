@@ -27,7 +27,7 @@
   </include>
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find crane_x7_gazebo)/worlds/table2.world"/>
+    <arg name="world_name" value="$(find crane_x7_gazebo)/worlds/table3.world"/>
     <arg name="debug" value="$(arg gazebo_debug)" />
     <arg name="gui" value="$(arg gui)" />
     <arg name="paused" value="$(arg paused)"/>
