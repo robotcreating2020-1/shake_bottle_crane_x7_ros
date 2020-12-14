@@ -248,6 +248,11 @@ def main():
       move_gripper(1.57)
       i += 1
     
+    move_arm2(0.20, 0, 0.10)
+    move_gripper(0.25)
+    move_arm(0.35, y, 0.12)
+    move_gripper(1.57)
+
 
     arm.set_named_target("home")
     arm.go()
