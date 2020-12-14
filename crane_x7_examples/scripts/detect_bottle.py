@@ -13,7 +13,7 @@ from std_msgs.msg import Int32
 #グローバル変数を初期化
 finish = True
 flag = 0
-y = 0.20
+y = 0
 
 #callback関数
 def callback(data):
@@ -175,8 +175,6 @@ def main():
  
     #ハンドを開く
     move_gripper(1.3)
-
-    move_gripper(0.15)
 
 
     #1つめのボトルを見る
