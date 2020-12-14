@@ -57,26 +57,44 @@ def main():
 	move_gripper(1.3)
 
 	# 掴みに行く(1回目)
-	x = 0.24
-	y = 0.20
 	move_arm(x, y, 0.25)
 
 	# 掴む
 	move_gripper(0.25)
-	move_max_velocity()
 
 	# 持ち上げる
-	move_arm(0.15, 0.2, 0.4)
+	move_arm(0.1, 0.0, 0.6)
+	# 一応プチプチの位置を(0.1, 0.0)としてます
+
+	# 落とす
+	move_gripper(1.5)
 
 	'''
+	i = 0
 	仮置き２回目以降
-	move_arm(0.2, 0.0, 1.0)
-	while True:
-		if sen_x < 320:
-			sen_x = ?とりあえず
-	move_arm(sen_x, sen_y, 1.0)
+	while i < 4:
+		move_arm(0.1, 0.0, 0.6)
+
+		joint_angle = math.radians(3)
+		target_joint_values = arm.get_current_joint_values()
+		target_joint_values[5] = joint_angle
+		arm.set_joint_value_target(target_joint_values)
+		arm.go()
+
+		move_arm(x, y, 0.2)
+
+		move_gripper(0.25)
+
+		move_arm(0.1, 0.0, 0.5)
+
+		move_gripper(1.5)
+		i++
 	'''
-	
+	arm.set_named_target("home")
+	arm.go()
+
+	arm.set_named_target("vertical")
+	arm.go()
 
 if __name__ == '__main__':
 
