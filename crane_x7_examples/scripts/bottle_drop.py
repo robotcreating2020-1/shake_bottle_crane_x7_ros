@@ -41,25 +41,26 @@ def main():
 
 
     # アームを移動する
-    def move_arm(pos_x, pos_y, pos_z):
+    def move_arm1(pos_x, pos_y, pos_z):
         target_pose = geometry_msgs.msg.Pose()
         target_pose.position.x = pos_x
         target_pose.position.y = pos_y
         target_pose.position.z = pos_z
-        q = quaternion_from_euler(-3.14/2.0, 0.0, -3.14/2.0)  # 上方から掴みに行く場合
+        q = quaternion_from_euler(-3.14/2.0, 0.0, -3.14/2.0)  # 上方から掴みに行く場合は xを-3.14にする
         target_pose.orientation.x = q[0]
         target_pose.orientation.y = q[1]
         target_pose.orientation.z = q[2]
         target_pose.orientation.w = q[3]
         arm.set_pose_target(target_pose)  # 目標ポーズ設定
         arm.go()  # 実行
+
     #gripperの角度をつける関数(ボトルに角度をつける部分)
-    def radian_arm(pos_x,pos_y,pos_z):
+    def move_arm2(pos_x,pos_y,pos_z):
         target_pose = geometry_msgs.msg.Pose()
         target_pose.position.x = pos_x
         target_pose.position.y = pos_y
         target_pose.position.z = pos_z
-        q = quaternion_from_euler(0.0, 3.14/1.5, 0.0) #(x軸、y軸、z軸)にそれぞれ回転する
+        q = quaternion_from_euler(-3.14, 0.0, -3.14/2.0) #(x軸、y軸、z軸)にそれぞれ回転する
         target_pose.orientation.x = q[0]
         target_pose.orientation.y = q[1]
         target_pose.orientation.z = q[2]
@@ -67,11 +68,34 @@ def main():
         arm.set_pose_target(target_pose) #目標ポーズの設定
         arm.go() #実行
 
-    # ボトルを落とす関数を定義
-    def Drop_bottle(x, y, z1, z2):
-        move_arm(x, y, z1)
+    #gripperの角度をつける関数(ボトルに角度をつける部分)
+    def radian_arm(pos_x,pos_y,pos_z):
+        target_pose = geometry_msgs.msg.Pose()
+        target_pose.position.x = pos_x
+        target_pose.position.y = pos_y
+        target_pose.position.z = pos_z
+        q = quaternion_from_euler(-3.14, 0.0, -3.14/2.0) #(x軸、y軸、z軸)にそれぞれ回転する
+        target_pose.orientation.x = q[0]
+        target_pose.orientation.y = q[1]
+        target_pose.orientation.z = q[2]
+        target_pose.orientation.w = q[3]
+        arm.set_pose_target(target_pose) #目標ポーズの設定
+        arm.go() #実行
+
+    # ボトル(1回目)を落とす関数を定義
+    def Drop_bottle1(x, y, z1, z2):
+        move_arm1(x, y, z1)
         move_gripper(0.25)
-        move_arm(x, y, z2)
+        move_arm1(x, y, z2)
+        target_joint_values = arm.get_current_joint_values()
+        arm.set_joint_value_target(target_joint_values)
+        arm.go()
+
+    #ボトル(2回目以降)を落とす関数を定義
+    def Drop_bottle2(x, y, z1, z2):
+        move_arm2(x, y, z1)
+        move_gripper(0.25)
+        move_arm2(x, y, z2)
         target_joint_values = arm.get_current_joint_values()
         arm.set_joint_value_target(target_joint_values)
         arm.go()
@@ -86,14 +110,17 @@ def main():
     
     
     #掴む準備
-    move_arm(0.25, 0.15, 0.3)
-    move_arm(0.23, 0.20, 0.25)
+    move_arm1(0.25, 0.15, 0.3)
+    move_arm1(0.23, 0.20, 0.25)
 
 
     #ボトルを掴んで落とす
-    for i in range(5):
-      Drop_bottle(0.24, 0.20, 0.10, 0.20)
-      radian_arm(0.24, 0.20, 0.30)
+    Drop_bottle1(0.24, 0.20, 0.10, 0.20)
+    radian_arm(0.24, 0.25, 0.30)
+    move_gripper(1.57)
+    for i in range(4):
+      Drop_bottle2(0.24, 0.20, 0.10, 0.20)
+      radian_arm(0.24, 0.25, 0.30)
       move_gripper(1.57)
       i += 1
 

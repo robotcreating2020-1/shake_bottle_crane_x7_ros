@@ -64,7 +64,7 @@ class image_converter:
             x, y, w, h = cv2.boundingRect(rect)
             cv2.rectangle(thresh, (x, y), (x + w, y + h), (255, 0, 0), 10)
             area_size = w * h
-            if area_size > 35000:
+            if area_size > 10000:
               print(area_size)
               pub.publish(area_size)
 
