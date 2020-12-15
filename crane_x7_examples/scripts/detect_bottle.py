@@ -22,7 +22,7 @@ def callback(data):
       global y
       pub = rospy.Publisher("find_red", Int32, queue_size=1)
       pub.publish(flag) 
-      if flag == 1: #yにぼとるのy座標を格納
+      if flag == 1: #yにボトルのy座標を格納
         y = 0.30
       if flag == 2:
         y = 0.0
@@ -70,13 +70,13 @@ def main():
 
     def pre_show_bottle(pos_y):
         #見せに行く準備
-        move_arm(0.13, pos_y, 0.2)
-        move_arm(0.15, pos_y, 0.15)
+        move_arm(0.13, pos_y, 0.25)
+        move_arm(0.15, pos_y, 0.20)
 
     def show_bottle(pos_y):
         #ボトルを見に行く
         move_max_velocity()
-        move_arm(0.15, pos_y, 0.1)
+        move_arm(0.15, pos_y, 0.20)
         sub = rospy.Subscriber('bottle_size', Int32, callback)
         #pub.publish(n)
         rospy.sleep(5)
@@ -123,19 +123,11 @@ def main():
         arm.set_pose_target(target_pose) #目標ポーズの設定
         arm.go() #実行
 
-    def Drop_bottle1(x, y, z1, z2):
-        move_arm(x, y, z1)
-        move_gripper(0.25)
-        move_arm(x, y, z2)
-        move_arm(0.2, 0, z2)
-        target_joint_values = arm.get_current_joint_values()
-        arm.set_joint_value_target(target_joint_values)
-        arm.go()
-
     #ボトル(2回目以降)を落とす関数を定義
     def Drop_bottle2(x, y, z1, z2):
+        move_arm2(x, y, 0.15)
         move_arm2(x, y, z1)
-        move_gripper(0.25)
+        move_gripper(0.23)
         move_arm2(x, y, z2)
         target_joint_values = arm.get_current_joint_values()
         arm.set_joint_value_target(target_joint_values)
@@ -169,16 +161,15 @@ def main():
         arm.set_named_target("vertical")
         arm.go()
 
-    # SRDFに定義されている"home"の姿勢にする
     arm.go()
- 
+
     #ハンドを開く
     move_gripper(1.3)
 
 
     #1つめのボトルを見る
-    move_arm(0.15, 0.20, 0.3)
     flag = 1
+    move_arm(0.15, 0.20, 0.3)
     pre_show_bottle(0.30)
     show_bottle(0.30)
 
@@ -194,8 +185,8 @@ def main():
     arm.go()
 
     #3つめのボトルを見る
-    move_arm(0.15, -0.20, 0.3)
     flag = 3
+    move_arm(0.15, -0.20, 0.3)
     pre_show_bottle(-0.30)
     show_bottle(-0.30)
 
@@ -217,9 +208,6 @@ def main():
     move_gripper(1.3)
 
     #ボトルを掴んで落とすのはここから
-    #move_arm(0.1, y, 0.3)
-    #move_arm(0.2, y, 0.25)
-
     move_arm(0.34, y-0.1, 0.2)
     move_arm(0.25, y, 0.15)
     move_arm(0.25, y, 0.13)
@@ -243,14 +231,19 @@ def main():
 
     move_gripper(1.57)
     for i in range(4):
-      Drop_bottle2(0.2, 0, 0.10, 0.20)
-      radian_arm(0.2, 0, 0.20)
+      Drop_bottle2(0.2, 0, 0.11, 0.30)
+      radian_arm(0.2, 0, 0.25)
       move_gripper(1.57)
       i += 1
+    #ボトルを振るのはここまで
     
+    #ボトルを元の場所に戻す(實川)
     move_arm2(0.20, 0, 0.10)
-    move_gripper(0.25)
-    move_arm(0.35, y, 0.12)
+    move_gripper(0.23)
+    move_arm2(0.20, 0, 0.20)
+    arm.set_named_target("home")
+    arm.go()
+    move_arm(0.35, y, 0.11)
     move_gripper(1.57)
 
 
